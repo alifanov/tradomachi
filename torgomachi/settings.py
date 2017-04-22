@@ -77,9 +77,9 @@ WEBHOOK_URL_PATH = "/%s/webhook/" % (TELEGRAM_TOKEN)
 
 print(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
 
-bot.remove_webhook()
+webhook_bot.remove_webhook()
 
-bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+webhook_bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
 MIDDLEWARE = [
