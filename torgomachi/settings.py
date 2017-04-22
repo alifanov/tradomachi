@@ -63,7 +63,7 @@ RQ_QUEUES = {
 
 TELEGRAM_TOKEN = '298399611:AAFJKjYtpkNL-mxd9mwB2tmrgDsSxW3liS4'
 
-bot = telebot.TeleBot(TELEGRAM_TOKEN)
+webhook_bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 WEBHOOK_HOST = '107.170.43.198'
 WEBHOOK_PORT = 443
