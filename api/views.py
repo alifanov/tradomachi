@@ -82,9 +82,7 @@ def echo_message(message):
         )
     elif message.text == '/order':
         offer = bot_user.bot.get_offer()
-        print(offer)
         order = bot_user.bot.order(offer['operation'], offer['pair'])
-        print(offer)
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
@@ -95,7 +93,7 @@ def echo_message(message):
             reply_markup=markup
         )
 
-        delayed_process_order.delay(order.id, timeout=5)
+        delayed_process_order.delay(order.id)
 
     elif message.text == '/offer':
         offer = bot_user.bot.get_offer()
