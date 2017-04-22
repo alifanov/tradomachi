@@ -101,5 +101,5 @@ class Order(models.Model):
         self.bot.balance += self.bid
         self.bot.save()
 
-        webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно заершена. Мы крутаны!!! XD')
+        webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно завершена. Мы крутаны!!! XD')
 
