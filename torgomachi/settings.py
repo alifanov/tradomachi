@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import telebot
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,6 +60,23 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 360,
     }
 }
+
+TELEGRAM_TOKEN = '298399611:AAFJKjYtpkNL-mxd9mwB2tmrgDsSxW3liS4'
+
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
+
+WEBHOOK_HOST = '107.170.43.198'
+WEBHOOK_PORT = 80
+WEBHOOK_LISTEN = '0.0.0.0'
+
+WEBHOOK_SSL_CERT = os.path.join(BASE_DIR, 'certs', 'webhook_cert.pem')
+WEBHOOK_SSL_PRIV = os.path.join(BASE_DIR, 'certs', 'webhook_pkey.pem')
+
+WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
+WEBHOOK_URL_PATH = "/%s/webhook/" % (TELEGRAM_TOKEN)
+
+bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+                certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

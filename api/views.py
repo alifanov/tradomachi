@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from rest_framework.views import APIView, Response
 from rest_framework.viewsets import ModelViewSet
 from api.models import (Bot, Signal, BotUser, Order)
@@ -35,6 +35,16 @@ class BotViewset(ModelViewSet):
             return HttpResponseForbidden()
         self.bot_user = BotUser.objects.get(chat_id=self.request.query_params['chat_id'])
         return Bot.objects.filter(user=self.bot_user)
+
+
+class WebhookView(APIView):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        return HttpResponse('')
+
+    def get(self, request, *args, **kwargs):
+        print(request.data)
+        return HttpResponse('Test: OK')
 
 
 class StartView(APIView):
