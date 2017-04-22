@@ -40,6 +40,7 @@ class BotViewset(ModelViewSet):
 
 class WebhookView(APIView):
     def post(self, request, *args, **kwargs):
+        print(request.data)
         webhook_bot.process_new_updates([request.data])
         return HttpResponse('')
 
