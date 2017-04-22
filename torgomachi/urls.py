@@ -26,7 +26,6 @@ router.register(r'bots', BotViewset, 'Bot')
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^start/$', StartView.as_view(), name='start'),
     url(r'^admin/', admin.site.urls),
     url(r'^django-rq/', include('django_rq.urls')),
     url(r'^(?P<token>[\w:-]+)/webhook/$', WebhookView.as_view()),
