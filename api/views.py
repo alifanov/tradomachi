@@ -58,6 +58,7 @@ class WebhookView(APIView):
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
     print(message.text)
+    print(message.text == '/offer')
     print(message)
     bot_user = BotUser.objects.get(chat_id=message.chat.id)
     if message.text == '/start':
