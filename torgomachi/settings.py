@@ -77,12 +77,12 @@ WEBHOOK_SSL_PRIV = os.path.join(BASE_DIR, 'certs', 'webhook_pkey.pem')
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/webhook/" % (TELEGRAM_TOKEN)
 
-print(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
+# print(WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
 
-webhook_bot.remove_webhook()
+# webhook_bot.remove_webhook()
 
-webhook_bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-                certificate=open(WEBHOOK_SSL_CERT, 'r'))
+# webhook_bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+#                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
