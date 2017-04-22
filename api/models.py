@@ -1,4 +1,5 @@
 from django.db import models
+from torgomachi.settings import webhook_bot
 
 # Create your models here.
 class BotUser(models.Model):
@@ -99,4 +100,6 @@ class Order(models.Model):
         self.save()
         self.bot.balance += self.bid
         self.bot.save()
+
+        webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно заершена. Мы крутаны!!! XD')
 
