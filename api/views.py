@@ -60,8 +60,8 @@ def echo_message(message):
     print(message.text)
     print(message.text == '/offer')
     print(message)
+    print(message.chat.id)
     bot_user = BotUser.objects.get(chat_id=message.chat.id)
-    print(bot_user)
     if message.text == '/start':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
