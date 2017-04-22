@@ -71,12 +71,28 @@ def echo_message(message):
             "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
             reply_markup=markup
         )
-    elif message.text == '/offer':
-        print('elif')
+    elif message.text == '/clear':
+        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+        markup.add('/offer')
+        webhook_bot.send_message(
+            message.chat.id,
+            "OK, буду искать другие сделки :)",
+            reply_markup=markup
+        )
+    elif message.text == '/order':
         offer = bot_user.bot.get_offer()
+        bot_user.bot.order(offer['operation'], offer['pair'])
 
-        print(message.text)
-        print(offer)
+        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+        markup.add('/offer')
+
+        webhook_bot.send_message(
+            message.chat.id,
+            "Ордер создан. Скоро узнаем на сколько мы везучие ))",
+            reply_markup=markup
+        )
+    elif message.text == '/offer':
+        offer = bot_user.bot.get_offer()
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/order')
