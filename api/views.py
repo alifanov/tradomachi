@@ -57,6 +57,7 @@ class WebhookView(APIView):
 
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
+    print(message.text)
     print(message)
     bot_user = BotUser.objects.get(chat_id=message.chat.id)
     if message.text == '/start':
@@ -75,7 +76,6 @@ def echo_message(message):
         print(offer)
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/offer')
         markup.add('/order')
         markup.add('/clear')
 
