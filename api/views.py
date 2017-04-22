@@ -59,8 +59,14 @@ class WebhookView(APIView):
 def echo_message(message):
     print(message)
     if message.text == '/start':
+        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+        markup.add('/offer')
         webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
-        webhook_bot.send_message(message.chat.id, "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.")
+        webhook_bot.send_message(
+            message.chat.id,
+            "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
+            reply_markup=markup
+        )
     else:
         webhook_bot.reply_to(message, message.text)
     # webhook_bot.send_sticker(message.chat.id, open(os.path.join(BASE_DIR, 'images', 'start.png'), 'rb').read())
