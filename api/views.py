@@ -6,7 +6,7 @@ from api.models import (Bot, Signal, BotUser, Order)
 from api.serializers import *
 # Create your views here.
 from rest_framework.decorators import detail_route, list_route
-from django.conf import settings
+from torgomachi.settings import webhook_bot
 
 
 class BotViewset(ModelViewSet):
@@ -40,13 +40,13 @@ class BotViewset(ModelViewSet):
 
 class WebhookView(APIView):
     def post(self, request, *args, **kwargs):
-        settings.bot.process_new_updates([request.data])
+        webhook_bot.process_new_updates([request.data])
         return HttpResponse('')
 
 
-@settings.bot.message_handler(func=lambda message: True, content_types=['text'])
+@webhook_bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
-    settings.bot.reply_to(message, message.text)
+    webhook_bot.reply_to(message, message.text)
 
 
 class StartView(APIView):
