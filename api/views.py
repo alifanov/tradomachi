@@ -8,6 +8,9 @@ from api.serializers import *
 from rest_framework.decorators import detail_route, list_route
 from torgomachi.settings import webhook_bot
 
+import telebot
+import ujson
+
 
 class BotViewset(ModelViewSet):
     serializer_class = BotSeralizer
@@ -41,7 +44,8 @@ class BotViewset(ModelViewSet):
 class WebhookView(APIView):
     def post(self, request, *args, **kwargs):
         print(request.data)
-        webhook_bot.process_new_updates([request.data])
+        update = telebot.types.Update.de_json(ujson.dumps(request.data))
+        webhook_bot.process_new_updates([update])
         return HttpResponse('')
 
 
