@@ -52,7 +52,7 @@ class WebhookView(APIView):
 
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
-    print(message)
+    # print(message)
 
     bot_user, _ = BotUser.objects.get_or_create(chat_id=message.chat.id)
     Bot.objects.get_or_create(user=bot_user)
@@ -83,6 +83,7 @@ def echo_message(message):
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
 
+        webhook_bot.send_sticker(message.chat.id, STICKER_WAIT_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
             "Ордер создан. Скоро узнаем на сколько мы везучие ))",
@@ -97,6 +98,7 @@ def echo_message(message):
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/order', '/clear')
 
+        webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
             "Есть интересная сделка. {} для пары {}. Вероятность успеха: {}%".format(
