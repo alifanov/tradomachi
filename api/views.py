@@ -6,6 +6,7 @@ from api.models import (Bot, Signal, BotUser, Order)
 from api.serializers import *
 # Create your views here.
 from rest_framework.decorators import detail_route, list_route
+from django.conf import settings
 
 
 class BotViewset(ModelViewSet):
@@ -39,12 +40,13 @@ class BotViewset(ModelViewSet):
 
 class WebhookView(APIView):
     def post(self, request, *args, **kwargs):
-        print(request.data)
+        settings.bot.process_new_updates([request.data])
         return HttpResponse('')
 
-    def get(self, request, *args, **kwargs):
-        print(request.data)
-        return HttpResponse('Test: OK')
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo_message(message):
+    settings.bot.reply_to(message, message.text)
 
 
 class StartView(APIView):
