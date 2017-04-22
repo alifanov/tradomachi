@@ -1,5 +1,7 @@
+import random
 from django.db import models
-from torgomachi.settings import webhook_bot
+from torgomachi.settings import *
+
 
 # Create your models here.
 class BotUser(models.Model):
@@ -95,11 +97,28 @@ class Order(models.Model):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=STATUS_IN_PROGRESS)
 
     def process(self):
+        is_success = random.choice([True, False])
         # fake success
-        self.status = Order.STATUS_SUCCESS
-        self.save()
-        self.bot.balance += self.bid
-        self.bot.save()
+        if is_success:
+            self.status = Order.STATUS_SUCCESS
+            self.save()
+            self.bot.balance += self.bid
+            self.bot.save()
 
-        webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно завершена. Мы крутаны!!! XD')
+            webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_SUCCESS_FILE_ID)
+            webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно завершена. Мы крутаны!!! XD')
+            webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
+        else:
+            self.status = Order.STATUS_FAIL
+            self.save()
+            self.bot.balance -= self.bid
+            self.bot.save()
+
+            if self.bot.balance == 0:
+                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
+                webhook_bot.send_message(self.bot.user.chat_id, 'Good bye cruel world.')
+            else:
+                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
+                webhook_bot.send_message(self.bot.user.chat_id, 'Сделка прошла не в нашу пользу ((')
+                webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
 

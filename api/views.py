@@ -7,7 +7,7 @@ from api.tasks import delayed_process_order
 from api.serializers import *
 # Create your views here.
 from rest_framework.decorators import detail_route, list_route
-from torgomachi.settings import webhook_bot, BASE_DIR, STICKER_START_FILE_ID
+from torgomachi.settings import *
 
 import os
 import telebot
@@ -58,7 +58,7 @@ class WebhookView(APIView):
 
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
-    print(message)
+    # print(message)
 
     bot_user, _ = BotUser.objects.get_or_create(chat_id=message.chat.id)
     Bot.objects.get_or_create(user=bot_user)
@@ -66,15 +66,17 @@ def echo_message(message):
     if message.text == '/start':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
-        webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
+        webhook_bot.send_sticker(message.chat.id, STICKER_BORN_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
             "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
             reply_markup=markup
         )
+        webhook_bot.send_sticker(message.chat.id, STICKER_WELCOME_FILE_ID)
     elif message.text == '/clear':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
+        webhook_bot.send_sticker(message.chat.id, STICKER_SKIP_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
             "OK, буду искать другие сделки :)",
