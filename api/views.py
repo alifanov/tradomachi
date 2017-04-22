@@ -57,7 +57,7 @@ def echo_message(message):
     # webhook_bot.send_message(message.chat.id, message.text)
 
 
-@webhook_bot.message_handler(func=lambda message: True, content_types=['start'])
+@webhook_bot.message_handler(func=lambda message: True, commands=['start'])
 def start_handler(message):
     # webhook_bot.send_sticker(message.chat.id,)
     webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
