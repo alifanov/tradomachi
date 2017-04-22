@@ -71,6 +71,9 @@ def echo_message(message):
     elif message.text == '/offer':
         offer = bot_user.bot.get_offer()
 
+        print(message.text)
+        print(offer)
+
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
         markup.add('/order')
