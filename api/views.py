@@ -50,15 +50,9 @@ class WebhookView(APIView):
         return HttpResponse('')
 
 
-# @webhook_bot.message_handler(func=lambda message: True, commands=['start'])
-# def start_handler(message):
-    # webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
-    # webhook_bot.send_message(message.chat.id, "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.")
-
-
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
-    # print(message)
+    print(message)
 
     bot_user, _ = BotUser.objects.get_or_create(chat_id=message.chat.id)
     Bot.objects.get_or_create(user=bot_user)
@@ -101,8 +95,7 @@ def echo_message(message):
         offer = bot_user.bot.get_offer()
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/order')
-        markup.add('/clear')
+        markup.add('/order', '/clear')
 
         webhook_bot.send_message(
             message.chat.id,
@@ -115,29 +108,3 @@ def echo_message(message):
         )
     else:
         webhook_bot.reply_to(message, "OK")
-    # webhook_bot.send_sticker(message.chat.id, open(os.path.join(BASE_DIR, 'images', 'start.png'), 'rb').read())
-    # webhook_bot.send_message(message.chat.id, message.text)
-
-
-class StartView(APIView):
-    def post(self, request, *args, **kwargs):
-        data = request.data
-        response_data = {}
-
-        # get user
-        user, created = BotUser.objects.get_or_create(
-            chat_id=data['message']['chat']['id']
-        )
-        if created:
-            user.username = data['message']['username']
-            user.save()
-
-        operation = data.get('operation')
-        # agree order
-        if operation:
-            user.bot.order(
-                operation=operation,
-                pait=data['pair']
-            )
-
-        return Response(response_data)

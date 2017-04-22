@@ -98,7 +98,7 @@ class Order(models.Model):
 
     def process(self):
         is_success = random.choice([True, False])
-        # fake success
+        # fake success\fail
         if is_success:
             self.status = Order.STATUS_SUCCESS
             self.save()
