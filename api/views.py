@@ -49,7 +49,7 @@ class WebhookView(APIView):
         return HttpResponse('')
 
 
-@webhook_bot.message_handler(func=lambda message: True, content_types=['text'])
+@webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
     # webhook_bot.reply_to(message, message.text)
     print(message)
