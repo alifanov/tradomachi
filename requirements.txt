@@ -3,3 +3,4 @@ ujson
 djangorestframework
 django-rq
 ipython
+django-push-notifications

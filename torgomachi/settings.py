@@ -39,8 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'django_rq',
-    'rest_framework'
+    'rest_framework',
+    'push_notifications'
 ]
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "APNS_CERTIFICATE": os.path.join(BASE_DIR, "certs", "pushSandbox.pem"),
+    "APNS_TOPIC": "com.example.push_test",
+    "APNS_USE_SANDBOX": True
+}
 
 RQ_QUEUES = {
     'default': {

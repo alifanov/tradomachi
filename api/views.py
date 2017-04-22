@@ -19,6 +19,17 @@ class BotViewset(ModelViewSet):
             bot.toggle_signal(sid)
         return Response(BotSeralizer(bot).data)
 
+    @list_route(methods=['post'])
+    def order(self, request):
+        bot = self.get_queryset().first()
+        operation = request.data['operation']
+        pair = request.data['pair']
+        bot.order(
+            operation=operation,
+            pair=pair
+        )
+        return Response(BotSeralizer(bot).data)
+
     def get_queryset(self):
         if 'chat_id' not in self.request.query_params:
             return HttpResponseForbidden()

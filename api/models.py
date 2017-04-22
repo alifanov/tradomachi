@@ -26,6 +26,12 @@ class Bot(models.Model):
 
     signals = models.ManyToManyField(Signal, related_name='bots')
 
+    def get_offer(self):
+        prediction = self.predict()
+        if prediction['probability'] > .51:
+            return prediction
+        return {}
+
     def order(self, operation, pair):
         if operation != Bot.NOOP:
             Order.objects.create(
@@ -42,7 +48,12 @@ class Bot(models.Model):
             self.signals.add(sid)
 
     def predict(self):
-        return Bot.BUY
+        probability = .7
+        return {
+            'operation': Bot.BUY,
+            'pair': Order.PAIR_EUR_USD,
+            'probability': probability
+        }
 
     def get_level(self):
         return self.balance / Bot.LEVEL_SCALE
