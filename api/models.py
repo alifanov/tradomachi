@@ -1,5 +1,4 @@
 from django.db import models
-from api.tasks import delayed_process_order
 
 # Create your models here.
 class BotUser(models.Model):
@@ -34,13 +33,12 @@ class Bot(models.Model):
 
     def order(self, operation, pair):
         if operation != Bot.NOOP:
-            order = Order.objects.create(
+            return Order.objects.create(
                 bot=self,
                 pair=pair,
                 operation=operation
             )
-            delayed_process_order.delay(order.id, timeout=5)
-        return True
+        return None
 
     def toggle_signal(self, sid):
         if self.signals.filter(id=sid).exists():

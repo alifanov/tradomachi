@@ -3,6 +3,7 @@ from django.http import HttpResponseForbidden, HttpResponse
 from rest_framework.views import APIView, Response
 from rest_framework.viewsets import ModelViewSet
 from api.models import (Bot, Signal, BotUser, Order)
+from api.tasks import delayed_process_order
 from api.serializers import *
 # Create your views here.
 from rest_framework.decorators import detail_route, list_route
@@ -81,7 +82,9 @@ def echo_message(message):
         )
     elif message.text == '/order':
         offer = bot_user.bot.get_offer()
-        bot_user.bot.order(offer['operation'], offer['pair'])
+        order = bot_user.bot.order(offer['operation'], offer['pair'])
+
+        delayed_process_order.delay(order.id, timeout=5)
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
