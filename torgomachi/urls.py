@@ -18,7 +18,7 @@ from django.contrib import admin
 
 from rest_framework.routers import DefaultRouter
 
-from api.views import (StartView, BotViewset, WebhookView)
+from api.views import (BotViewset, WebhookView)
 
 router = DefaultRouter()
 router.register(r'bots', BotViewset, 'Bot')
