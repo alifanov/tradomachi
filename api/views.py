@@ -71,6 +71,7 @@ def echo_message(message):
             reply_markup=markup
         )
     elif message.text == '/offer':
+        print('elif')
         offer = bot_user.bot.get_offer()
 
         print(message.text)
