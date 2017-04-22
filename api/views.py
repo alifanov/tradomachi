@@ -82,6 +82,7 @@ def echo_message(message):
         )
     elif message.text == '/order':
         offer = bot_user.bot.get_offer()
+        print(offer)
         order = bot_user.bot.order(offer['operation'], offer['pair'])
 
         delayed_process_order.delay(order.id, timeout=5)
