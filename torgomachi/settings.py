@@ -45,9 +45,10 @@ INSTALLED_APPS = [
 
 PUSH_NOTIFICATIONS_SETTINGS = {
     "APNS_CERTIFICATE": os.path.join(BASE_DIR, "certs", "pushSandbox.pem"),
-    # "APNS_TOPIC": "com.example.push_test",
-    "APNS_USE_SANDBOX": True
+    "APNS_TOPIC": "com.example.push_test",
 }
+
+APNS_USE_SANDBOX = True
 
 RQ_QUEUES = {
     'default': {
