@@ -49,19 +49,19 @@ class WebhookView(APIView):
         return HttpResponse('')
 
 
+@webhook_bot.message_handler(func=lambda message: True, commands=['start'])
+def start_handler(message):
+    # webhook_bot.send_sticker(message.chat.id,)
+    webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
+    webhook_bot.send_message(message.chat.id, "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.")
+
+
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
     print(message)
     webhook_bot.reply_to(message, message.text)
     # webhook_bot.send_sticker(message.chat.id, open(os.path.join(BASE_DIR, 'images', 'start.png'), 'rb').read())
     # webhook_bot.send_message(message.chat.id, message.text)
-
-
-@webhook_bot.message_handler(func=lambda message: True, commands=['start'])
-def start_handler(message):
-    # webhook_bot.send_sticker(message.chat.id,)
-    webhook_bot.send_sticker(message.chat.id, STICKER_START_FILE_ID)
-    webhook_bot.send_message(message.chat.id, "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.")
 
 
 class StartView(APIView):
