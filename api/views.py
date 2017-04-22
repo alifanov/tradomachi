@@ -44,7 +44,7 @@ class WebhookView(APIView):
         return HttpResponse('')
 
 
-@bot.message_handler(func=lambda message: True, content_types=['text'])
+@settings.bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
     settings.bot.reply_to(message, message.text)
 
