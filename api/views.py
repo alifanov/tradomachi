@@ -70,7 +70,7 @@ def echo_message(message):
             "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
             reply_markup=markup
         )
-    elif message.text == '/offer':
+    if message.text == '/offer':
         print('elif')
         offer = bot_user.bot.get_offer()
 
