@@ -51,7 +51,7 @@ class WebhookView(APIView):
 
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
-    webhook_bot.send_sticker(message.chat.id, open(os.path.join(BASE_DIR, 'images', 'start.png')))
+    webhook_bot.send_sticker(message.chat.id, open(os.path.join(BASE_DIR, 'images', 'start.png')).read())
     webhook_bot.reply_to(message, message.text)
 
 
