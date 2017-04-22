@@ -58,6 +58,7 @@ class WebhookView(APIView):
 @webhook_bot.message_handler(func=lambda message: True, content_types=['text', 'sticker'])
 def echo_message(message):
     print(message)
+    bot_user = BotUser.objects.get(chat_id=message.chat.id)
     if message.text == '/start':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
@@ -65,6 +66,23 @@ def echo_message(message):
         webhook_bot.send_message(
             message.chat.id,
             "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
+            reply_markup=markup
+        )
+    elif message.text == '/offer':
+        offer = bot_user.bot.get_offer()
+
+        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+        markup.add('/offer')
+        markup.add('/order')
+        markup.add('/clear')
+
+        webhook_bot.send_message(
+            message.chat.id,
+            "Есть интересная сделка. {} для пары {}. Вероятность успеха: {}%".format(
+                offer['operation'].capitalize(),
+                offer['pair'].upper(),
+                offer['probability']*100
+            ),
             reply_markup=markup
         )
     else:
