@@ -70,7 +70,7 @@ def echo_message(message):
 
     if message.text == '/start':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('Есть чо?')
+        markup.add('Что на рынке?')
         webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_BORN_FILE_ID', bot_user.get_sticker_prefix()))
         webhook_bot.send_message(
             message.chat.id,
@@ -80,7 +80,7 @@ def echo_message(message):
         webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_WELCOME_FILE_ID', bot_user.get_sticker_prefix()))
     elif message.text in ['Нет', 'Не хочу']:
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('Есть чо?')
+        markup.add('Что на рынке?')
         webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_SKIP_FILE_ID', bot_user.get_sticker_prefix()))
         webhook_bot.send_message(
             message.chat.id,
@@ -92,7 +92,7 @@ def echo_message(message):
         order = bot_user.bot.order(offer['operation'], offer['pair'])
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('Есть чо?')
+        markup.add('Что на рынке?')
 
         webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_WAIT_FILE_ID', bot_user.get_sticker_prefix()))
         webhook_bot.send_message(
@@ -108,7 +108,7 @@ def echo_message(message):
         bot_user.save()
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('Есть чо?')
+        markup.add('Что на рынке?')
 
         webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_ETF_BOUGHT_FILE_ID', bot_user.get_sticker_prefix()))
         webhook_bot.send_message(
@@ -117,7 +117,7 @@ def echo_message(message):
             reply_markup=markup
         )
 
-    elif message.text == 'Есть чо?':
+    elif message.text == 'Что на рынке?':
         if random.uniform(0.4, 1.0) < 0.5:
 
             markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
@@ -154,7 +154,7 @@ def echo_message(message):
             else:
                 webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_NO_DEAL_FILE_ID', bot_user.get_sticker_prefix()))
                 markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-                markup.add('Есть чо?')
+                markup.add('Что на рынке?')
                 webhook_bot.send_message(
                     message.chat.id,
                     "Увы, но пока нет подходящих сделок на рынке",
