@@ -36,10 +36,18 @@ class BotViewset(ModelViewSet):
         )
         return Response(BotSeralizer(bot).data)
 
+    @list_route(methods=['post'])
+    def register(self, request):
+
+        bot_user, _ = BotUser.objects.get_or_create(ios_id=request.data['ios_id'])
+        bot, _ = Bot.objects.get_or_create(user=bot_user)
+
+        return Response(BotSeralizer(bot).data)
+
     def get_queryset(self):
         if 'chat_id' not in self.request.query_params:
             return HttpResponseForbidden()
-        self.bot_user = BotUser.objects.get(chat_id=self.request.query_params['chat_id'])
+        self.bot_user = BotUser.objects.get(ios_id=self.request.query_params['ios_id'])
         return Bot.objects.filter(user=self.bot_user)
 
 

@@ -1,12 +1,23 @@
 import random
 from django.db import models
 from torgomachi.settings import *
+from apns import APNs, Payload
+
+def send_ios_notification(text):
+    apns = APNs(
+        use_sandbox=True,
+        cert_file=PUSH_NOTIFICATIONS_SETTINGS['APNS_CERTIFICATE'],
+        key_file=PUSH_NOTIFICATIONS_SETTINGS['APNS_CERTIFICATE'])
+    token_hex = '104636f177046985d0a728735f2b583d26885bd9f4a29f833c0922bf5a1ec906'
+    payload = Payload(alert=text, sound="default", badge=1)
+    apns.gateway_server.send_notification(token_hex, payload)
 
 
 # Create your models here.
 class BotUser(models.Model):
-    chat_id = models.PositiveIntegerField()
+    chat_id = models.PositiveIntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
+    ios_id = models.TextField(blank=True, null=True)
 
 
 class Signal(models.Model):
@@ -111,9 +122,12 @@ class Order(models.Model):
             self.bot.balance += self.bid
             self.bot.save()
 
-            webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_SUCCESS_FILE_ID)
-            webhook_bot.send_message(self.bot.user.chat_id, 'Неплохо поднялись, босс!')
-            webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
+            if self.bot.user.chat_id:
+                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_SUCCESS_FILE_ID)
+                webhook_bot.send_message(self.bot.user.chat_id, 'Неплохо поднялись, босс!')
+                webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
+            if self.bot.user.ios_id:
+                send_ios_notification('Неплохо поднялись, босс!')
         else:
             self.status = Order.STATUS_FAIL
             self.save()
@@ -121,10 +135,16 @@ class Order(models.Model):
             self.bot.save()
 
             if self.bot.balance == 0:
-                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
-                webhook_bot.send_message(self.bot.user.chat_id, 'Покойся с миром. Оживить за $100?')
+                if self.bot.user.chat_id:
+                    webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
+                    webhook_bot.send_message(self.bot.user.chat_id, 'Покойся с миром. Оживить за $100?')
+                if self.bot.user.ios_id:
+                    send_ios_notification('Покойся с миром. Оживить за $100?')
             else:
-                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
-                webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
-                webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
+                if self.bot.user.chat_id:
+                    webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
+                    webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
+                    webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
+                if self.bot.user.ios_id:
+                    send_ios_notification('Что-то пошло не так')
 
