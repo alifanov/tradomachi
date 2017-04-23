@@ -50,11 +50,18 @@ class Bot(models.Model):
             self.signals.add(sid)
 
     def predict(self):
-        return {
-            'operation': random.choice([Bot.BUY, Bot.SELL]),
-            'pair': random.choice([Order.PAIR_EUR_USD, Order.PAIR_USD_EUR]),
-            'probability': random.uniform(0.3, 1.0)
-        }
+        if DEMO:
+            return {
+                'operation': random.choice([Bot.BUY, Bot.SELL]),
+                'pair': random.choice([Order.PAIR_EUR_USD, Order.PAIR_USD_EUR]),
+                'probability': random.uniform(0.3, 1.0)
+            }
+        else:
+            return {
+                'operation': random.choice([Bot.BUY, Bot.SELL]),
+                'pair': random.choice([Order.PAIR_EUR_USD, Order.PAIR_USD_EUR]),
+                'probability': random.uniform(.3, .4)
+            }
 
     def get_level(self):
         return self.balance / Bot.LEVEL_SCALE
