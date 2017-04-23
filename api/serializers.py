@@ -26,7 +26,7 @@ class SignalSeralizer(serializers.ModelSerializer):
 
 
 class BotSeralizer(serializers.ModelSerializer):
-    # signals = serializers.SerializerMethodField()
+    signals = serializers.SerializerMethodField()
     offer = serializers.DictField(source='get_offer')
     orders = OrderSerializer(read_only=True, many=True)
     level = serializers.SerializerMethodField()
@@ -34,16 +34,16 @@ class BotSeralizer(serializers.ModelSerializer):
     def get_level(self, obj):
         return obj.get_level()
 
-    # def get_signals(self, obj):
-    #     return [dict(SignalSeralizer(s).data, **{'enabled': obj.signals.filter(id=s.id).exists()}) for s in
-    #             Signal.objects.all()]
+    def get_signals(self, obj):
+        return [dict(SignalSeralizer(s).data, **{'enabled': obj.signals.filter(id=s.id).exists()}) for s in
+                Signal.objects.all()]
 
     class Meta:
         model = Bot
         fields = (
             'id',
             'balance',
-            # 'signals',
+            'signals',
             'offer',
             'orders',
             'level'

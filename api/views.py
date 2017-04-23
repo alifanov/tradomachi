@@ -45,7 +45,7 @@ class BotViewset(ModelViewSet):
         return Response(BotSeralizer(bot).data)
 
     def get_queryset(self):
-        if 'chat_id' not in self.request.query_params:
+        if 'ios_id' not in self.request.query_params:
             return HttpResponseForbidden()
         self.bot_user = BotUser.objects.get(ios_id=self.request.query_params['ios_id'])
         return Bot.objects.filter(user=self.bot_user)
