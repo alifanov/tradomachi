@@ -59,7 +59,7 @@ def echo_message(message):
 
     if message.text == '/start':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/offer')
+        markup.add('Есть чо?')
         webhook_bot.send_sticker(message.chat.id, STICKER_BORN_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
@@ -67,21 +67,21 @@ def echo_message(message):
             reply_markup=markup
         )
         webhook_bot.send_sticker(message.chat.id, STICKER_WELCOME_FILE_ID)
-    elif message.text == '/skip':
+    elif message.text == 'Нет':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/offer')
+        markup.add('Есть чо?')
         webhook_bot.send_sticker(message.chat.id, STICKER_SKIP_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
             "OK, буду искать другие сделки :)",
             reply_markup=markup
         )
-    elif message.text == '/order':
+    elif message.text == 'Да':
         offer = bot_user.bot.get_offer()
         order = bot_user.bot.order(offer['operation'], offer['pair'])
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/offer')
+        markup.add('Есть чо?')
 
         webhook_bot.send_sticker(message.chat.id, STICKER_WAIT_FILE_ID)
         webhook_bot.send_message(
@@ -92,11 +92,11 @@ def echo_message(message):
 
         delayed_process_order.delay(order.id)
 
-    elif message.text == '/offer':
+    elif message.text == 'Есть чо?':
         offer = bot_user.bot.get_offer()
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/order', '/skip')
+        markup.add('Да', 'Нет')
 
         webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
         webhook_bot.send_message(
