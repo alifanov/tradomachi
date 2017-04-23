@@ -89,6 +89,9 @@ def echo_message(message):
         )
     elif message.text == 'Да':
         offer = bot_user.bot.get_offer()
+        while not offer:
+            offer = bot_user.bot.get_offer()
+
         order = bot_user.bot.order(offer['operation'], offer['pair'])
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
