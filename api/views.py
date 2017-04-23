@@ -102,13 +102,13 @@ def echo_message(message):
             webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
             webhook_bot.send_message(
                 message.chat.id,
-                "{} {}?! (инфа {}%)".format(
+                "{0} {1}?! (инфа {2:.2%})".format(
                     {
                         'buy': 'Покупаем',
                         'sell': 'Продаем'
                     }[offer['operation']],
                     offer['pair'].upper(),
-                    offer['probability']*100
+                    offer['probability']
                 ),
                 reply_markup=markup
             )
