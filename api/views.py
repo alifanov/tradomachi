@@ -117,5 +117,7 @@ def echo_message(message):
                 message.chat.id,
                 "Увы, но пока нет подходящих сделок на рынке"
             )
+            markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+            markup.add('Есть чо?')
     else:
         webhook_bot.reply_to(message, "OK")
