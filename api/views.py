@@ -141,7 +141,7 @@ def echo_message(message):
                 webhook_bot.send_sticker(message.chat.id, get_sticker('STICKER_OFFER_FILE_ID', bot_user.get_sticker_prefix()))
                 webhook_bot.send_message(
                     message.chat.id,
-                    "{0} {1}?! (инфа {2:.2%})".format(
+                    "{0} {1}?! (вероятность выигрыша {2:.2%})".format(
                         {
                             'buy': 'Покупаем',
                             'sell': 'Продаем'
