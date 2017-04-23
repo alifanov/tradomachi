@@ -75,7 +75,7 @@ def echo_message(message):
             reply_markup=markup
         )
         webhook_bot.send_sticker(message.chat.id, STICKER_WELCOME_FILE_ID)
-    elif message.text == 'Нет':
+    elif message.text in ['Нет', 'Не хочу']:
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('Есть чо?')
         webhook_bot.send_sticker(message.chat.id, STICKER_SKIP_FILE_ID)
@@ -100,33 +100,58 @@ def echo_message(message):
 
         delayed_process_order.delay(order.id)
 
+    elif message.text == 'Беру':
+        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+        markup.add('Есть чо?')
+
+        webhook_bot.send_sticker(message.chat.id, STICKER_ETF_BOUGHT_FILE_ID)
+        webhook_bot.send_message(
+            message.chat.id,
+            "Закупился. Теперь ждем подъема :)",
+            reply_markup=markup
+        )
+
     elif message.text == 'Есть чо?':
-        offer = bot_user.bot.get_offer()
-        if offer:
+        if random.uniform(0.4, 1.0) < 0.5:
 
             markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-            markup.add('Да', 'Нет')
+            markup.add('Беру', 'Не хочу')
 
             webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
             webhook_bot.send_message(
                 message.chat.id,
-                "{0} {1}?! (инфа {2:.2%})".format(
-                    {
-                        'buy': 'Покупаем',
-                        'sell': 'Продаем'
-                    }[offer['operation']],
-                    offer['pair'].upper(),
-                    offer['probability']
-                ),
+                "ETF: Говорят надо брать SPDR. Сейчас самая низкая цена за последние 90 дней.".format(),
                 reply_markup=markup
             )
         else:
-            webhook_bot.send_sticker(message.chat.id, STICKER_NO_DEAL_FILE_ID)
-            webhook_bot.send_message(
-                message.chat.id,
-                "Увы, но пока нет подходящих сделок на рынке"
-            )
-            markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-            markup.add('Есть чо?')
+
+            offer = bot_user.bot.get_offer()
+
+            if offer:
+
+                markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+                markup.add('Да', 'Нет')
+
+                webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
+                webhook_bot.send_message(
+                    message.chat.id,
+                    "{0} {1}?! (инфа {2:.2%})".format(
+                        {
+                            'buy': 'Покупаем',
+                            'sell': 'Продаем'
+                        }[offer['operation']],
+                        offer['pair'].upper(),
+                        offer['probability']
+                    ),
+                    reply_markup=markup
+                )
+            else:
+                webhook_bot.send_sticker(message.chat.id, STICKER_NO_DEAL_FILE_ID)
+                webhook_bot.send_message(
+                    message.chat.id,
+                    "Увы, но пока нет подходящих сделок на рынке"
+                )
+                markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+                markup.add('Есть чо?')
     else:
         webhook_bot.reply_to(message, "OK")
