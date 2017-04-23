@@ -94,22 +94,28 @@ def echo_message(message):
 
     elif message.text == 'Есть чо?':
         offer = bot_user.bot.get_offer()
+        if offer:
 
-        markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('Да', 'Нет')
+            markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
+            markup.add('Да', 'Нет')
 
-        webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
-        webhook_bot.send_message(
-            message.chat.id,
-            "{} {}?! (инфа {}%)".format(
-                {
-                    'buy': 'Покупаем',
-                    'sell': 'Продаем'
-                }[offer['operation']],
-                offer['pair'].upper(),
-                offer['probability']*100
-            ),
-            reply_markup=markup
-        )
+            webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
+            webhook_bot.send_message(
+                message.chat.id,
+                "{} {}?! (инфа {}%)".format(
+                    {
+                        'buy': 'Покупаем',
+                        'sell': 'Продаем'
+                    }[offer['operation']],
+                    offer['pair'].upper(),
+                    offer['probability']*100
+                ),
+                reply_markup=markup
+            )
+        else:
+            webhook_bot.send_message(
+                message.chat.id,
+                "Увы, но пока нет подходящих сделок на рынке"
+            )
     else:
         webhook_bot.reply_to(message, "OK")

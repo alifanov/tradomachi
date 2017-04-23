@@ -50,11 +50,10 @@ class Bot(models.Model):
             self.signals.add(sid)
 
     def predict(self):
-        probability = .7
         return {
-            'operation': Bot.BUY,
-            'pair': Order.PAIR_EUR_USD,
-            'probability': probability
+            'operation': random.choice([Bot.BUY, Bot.SELL]),
+            'pair': random.choice([Order.PAIR_EUR_USD, Order.PAIR_USD_EUR]),
+            'probability': random.uniform(0.3, 1.0)
         }
 
     def get_level(self):
