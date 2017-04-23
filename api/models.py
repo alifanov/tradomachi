@@ -4,13 +4,13 @@ from torgomachi.settings import *
 from apns import APNs, Payload
 
 
-def send_ios_notification(text, user):
+def send_ios_notification(text, user, order_id):
     apns = APNs(
         use_sandbox=True,
         cert_file=PUSH_NOTIFICATIONS_SETTINGS['APNS_CERTIFICATE'],
         key_file=PUSH_NOTIFICATIONS_SETTINGS['APNS_CERTIFICATE'])
     token_hex = user.ios_id
-    payload = Payload(alert=text, sound="default", badge=1)
+    payload = Payload(alert=text, sound="default", badge=1, custom={'order_id': order_id})
     apns.gateway_server.send_notification(token_hex, payload)
 
 
@@ -128,7 +128,7 @@ class Order(models.Model):
                 webhook_bot.send_message(self.bot.user.chat_id, 'Неплохо поднялись, босс!')
                 webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
             if self.bot.user.ios_id:
-                send_ios_notification('Неплохо поднялись, босс!', self.bot.user)
+                send_ios_notification('Неплохо поднялись, босс!', self.bot.user, self.id)
         else:
             self.status = Order.STATUS_FAIL
             self.save()
@@ -140,12 +140,12 @@ class Order(models.Model):
                     webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
                     webhook_bot.send_message(self.bot.user.chat_id, 'Покойся с миром. Оживить за $100?')
                 if self.bot.user.ios_id:
-                    send_ios_notification('Покойся с миром. Оживить за $100?', self.bot.user)
+                    send_ios_notification('Покойся с миром. Оживить за $100?', self.bot.user, self.id)
             else:
                 if self.bot.user.chat_id:
                     webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
                     webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
                     webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
                 if self.bot.user.ios_id:
-                    send_ios_notification('Что-то пошло не так', self.bot.user)
+                    send_ios_notification('Что-то пошло не так', self.bot.user, self.id)
 
