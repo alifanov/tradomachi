@@ -6,3 +6,5 @@ ipython
 django-push-notifications
 git+https://github.com/kouki-dan/PyAPNs-python3.git
 pyTelegramBotAPI
+tensorflow
+keras
