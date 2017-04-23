@@ -30,10 +30,13 @@ class BotViewset(ModelViewSet):
         bot = self.get_queryset().first()
         operation = request.data['operation']
         pair = request.data['pair']
-        bot.order(
+
+        order = bot.order(
             operation=operation,
             pair=pair
         )
+
+        delayed_process_order.delay(order.id)
         return Response(BotSeralizer(bot).data)
 
     @list_route(methods=['post'])

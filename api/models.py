@@ -19,6 +19,7 @@ class BotUser(models.Model):
     chat_id = models.PositiveIntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
     ios_id = models.TextField(blank=True, null=True)
+    with_etf = models.BooleanField(default=False)
 
 
 class Signal(models.Model):
