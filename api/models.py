@@ -4,6 +4,10 @@ from torgomachi.settings import *
 from apns import APNs, Payload
 
 
+def get_sticker(label, prefix='EMPTY'):
+    return STICKERS[prefix][label]
+
+
 def send_ios_notification(text, user, order_id):
     apns = APNs(
         use_sandbox=True,
@@ -19,8 +23,10 @@ class BotUser(models.Model):
     chat_id = models.PositiveIntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
     ios_id = models.TextField(blank=True, null=True)
-    # with_etf = models.BooleanField(default=False)
+    with_etf = models.BooleanField(default=False)
 
+    def get_sticker_prefix(self):
+        return 'ETF' if self.bot.user.with_etf else 'EMPTY'
 
 class Signal(models.Model):
     name = models.CharField(max_length=100)
@@ -125,7 +131,7 @@ class Order(models.Model):
             self.bot.save()
 
             if self.bot.user.chat_id:
-                webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_SUCCESS_FILE_ID)
+                webhook_bot.send_sticker(self.bot.user.chat_id, get_sticker('STICKER_SUCCESS_FILE_ID', self.bot.user.get_sticker_prefix()))
                 webhook_bot.send_message(self.bot.user.chat_id, 'Неплохо поднялись, босс!')
                 webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
             if self.bot.user.ios_id:
@@ -138,13 +144,13 @@ class Order(models.Model):
 
             if self.bot.balance == 0:
                 if self.bot.user.chat_id:
-                    webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
+                    webhook_bot.send_sticker(self.bot.user.chat_id, get_sticker('STICKER_RIP_FILE_ID', self.bot.user.get_sticker_prefix()))
                     webhook_bot.send_message(self.bot.user.chat_id, 'Покойся с миром. Оживить за $100?')
                 if self.bot.user.ios_id:
                     send_ios_notification('Покойся с миром. Оживить за $100?', self.bot.user, self.id)
             else:
                 if self.bot.user.chat_id:
-                    webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
+                    webhook_bot.send_sticker(self.bot.user.chat_id, get_sticker('STICKER_RIP_FILE_ID', self.bot.user.get_sticker_prefix()))
                     webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
                     webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
                 if self.bot.user.ios_id:
