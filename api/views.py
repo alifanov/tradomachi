@@ -113,6 +113,7 @@ def echo_message(message):
                 reply_markup=markup
             )
         else:
+            webhook_bot.send_sticker(message.chat.id, STICKER_NO_DEAL_FILE_ID)
             webhook_bot.send_message(
                 message.chat.id,
                 "Увы, но пока нет подходящих сделок на рынке"
