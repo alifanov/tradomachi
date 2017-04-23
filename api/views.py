@@ -67,7 +67,7 @@ def echo_message(message):
             reply_markup=markup
         )
         webhook_bot.send_sticker(message.chat.id, STICKER_WELCOME_FILE_ID)
-    elif message.text == '/clear':
+    elif message.text == '/skip':
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
         markup.add('/offer')
         webhook_bot.send_sticker(message.chat.id, STICKER_SKIP_FILE_ID)
@@ -96,7 +96,7 @@ def echo_message(message):
         offer = bot_user.bot.get_offer()
 
         markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add('/order', '/clear')
+        markup.add('/order', '/skip')
 
         webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
         webhook_bot.send_message(
