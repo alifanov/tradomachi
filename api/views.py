@@ -63,7 +63,7 @@ def echo_message(message):
         webhook_bot.send_sticker(message.chat.id, STICKER_BORN_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
-            "Привет! Я енот Успех Успешных. Я умею торговать на валютном рынке и помогу тебе разбогатеть.",
+            "Привет! Я охреннный енотик, я точно знаю как делать деньги. Готов?",
             reply_markup=markup
         )
         webhook_bot.send_sticker(message.chat.id, STICKER_WELCOME_FILE_ID)
@@ -86,7 +86,7 @@ def echo_message(message):
         webhook_bot.send_sticker(message.chat.id, STICKER_WAIT_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
-            "Ордер создан. Скоро узнаем на сколько мы везучие ))",
+            "Подожди... сейчас будет",
             reply_markup=markup
         )
 
@@ -101,8 +101,11 @@ def echo_message(message):
         webhook_bot.send_sticker(message.chat.id, STICKER_OFFER_FILE_ID)
         webhook_bot.send_message(
             message.chat.id,
-            "Есть интересная сделка. {} для пары {}. Вероятность успеха: {}%".format(
-                offer['operation'].capitalize(),
+            "{} {}?! (инфа {}%)".format(
+                {
+                    'buy': 'Покупаем',
+                    'sell': 'Продаем'
+                }[offer['operation']],
                 offer['pair'].upper(),
                 offer['probability']*100
             ),

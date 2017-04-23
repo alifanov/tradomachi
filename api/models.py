@@ -106,7 +106,7 @@ class Order(models.Model):
             self.bot.save()
 
             webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_SUCCESS_FILE_ID)
-            webhook_bot.send_message(self.bot.user.chat_id, 'Сделка успешно завершена. Мы крутаны!!! XD')
+            webhook_bot.send_message(self.bot.user.chat_id, 'Неплохо поднялись, босс!')
             webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
         else:
             self.status = Order.STATUS_FAIL
@@ -116,9 +116,9 @@ class Order(models.Model):
 
             if self.bot.balance == 0:
                 webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_RIP_FILE_ID)
-                webhook_bot.send_message(self.bot.user.chat_id, 'Good bye cruel world.')
+                webhook_bot.send_message(self.bot.user.chat_id, 'Покойся с миром. Оживить за $100?')
             else:
                 webhook_bot.send_sticker(self.bot.user.chat_id, STICKER_FAIL_FILE_ID)
-                webhook_bot.send_message(self.bot.user.chat_id, 'Сделка прошла не в нашу пользу ((')
+                webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
                 webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
 
