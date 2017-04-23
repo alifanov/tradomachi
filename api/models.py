@@ -150,7 +150,7 @@ class Order(models.Model):
                     send_ios_notification('Покойся с миром. Оживить за $100?', self.bot.user, self.id)
             else:
                 if self.bot.user.chat_id:
-                    webhook_bot.send_sticker(self.bot.user.chat_id, get_sticker('STICKER_RIP_FILE_ID', self.bot.user.get_sticker_prefix()))
+                    webhook_bot.send_sticker(self.bot.user.chat_id, get_sticker('STICKER_FAIL_FILE_ID', self.bot.user.get_sticker_prefix()))
                     webhook_bot.send_message(self.bot.user.chat_id, 'Что-то пошло не так')
                     webhook_bot.send_message(self.bot.user.chat_id, 'У тебя теперь ${}'.format(self.bot.balance))
                 if self.bot.user.ios_id:
